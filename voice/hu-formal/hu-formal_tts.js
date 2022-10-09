@@ -50,7 +50,8 @@ function populateDictionary(tts) {
 	dictionary["then"] = tts ? "majd " : "then.ogg";
 	dictionary["and"] = tts ? "és" : "and.ogg";
 	dictionary["take"] = tts ? "hajtson ki" : "take.ogg";
-	dictionary["exit"] = tts ? "kijáraton" : "exit.ogg";
+	dictionary["exit1"] = tts ? "kijáraton" : "exit.ogg";
+	dictionary["exit2"] = tts ? "kijárat:" : "exit.ogg";
 
 	dictionary["1st"] = tts ? "az első" : "1st.ogg";
 	dictionary["2nd"] = tts ? "a második" : "2nd.ogg";
@@ -292,10 +293,10 @@ function turn(turnType, dist, streetName) {
 
 function take_exit(turnType, dist, exitString, exitInt, streetName) {
 	if (dist == -1) {
-		return getTurnType(turnType) + " " + dictionary["onto"] + " " + getExitNumber(exitString, exitInt) + " " + take_exit_name(streetName)
+		return getTurnType(turnType) + (tts ? ", " : " ") + getExitNumber(exitString, exitInt) + (tts ? ", " : " ") + take_exit_name(streetName)
 	} else {
-		return distance(dist, "nom") + " "
-			+ getTurnType(turnType) + " " + dictionary["onto"] + " " + getExitNumber(exitString, exitInt) + " " + take_exit_name(streetName)
+		return distance(dist, "nom") + " " + dictionary["after"] + " "
+			+ getTurnType(turnType) + (tts ? ", " : " ") + getExitNumber(exitString, exitInt) + (tts ? ", " : " ") + take_exit_name(streetName)
 	}
 }
 
@@ -303,7 +304,7 @@ function take_exit_name(streetName) {
 	if (Object.keys(streetName).length == 0 || (streetName["toDest"] === "" && streetName["toStreetName"] === "") || !tts) {
 		return "";
 	} else if (streetName["toDest"] != "") {
-		return (tts ? ", " : " ") + streetName["toStreetName"] + (tts ? ", " : " ") + dictionary["toward"] + " " + streetName["toDest"];
+		return (tts ? ", " : " ") + streetName["toStreetName"] + (tts ? ", " : " ") + streetName["toDest"] + " " + dictionary["toward"];
 	} else if (streetName["toStreetName"] != "") {
 		return (tts ? ", " : " ") + streetName["toStreetName"]
 	} else {
@@ -313,11 +314,11 @@ function take_exit_name(streetName) {
 
 function getExitNumber(exitString, exitInt) {
 	if (!tts && exitInt > 0 && exitInt < 18) {
-		return nth(exitInt) + " " + dictionary["exit"];
+		return nth(exitInt) + " " + dictionary["exit2"];
 	} else if (tts) {
-		return  dictionary["exit"] + " " + exitString;
+		return dictionary["exit2"] + " " + exitString;
 	} else {
-		return dictionary["exit"];
+		return dictionary["exit2"];
 	}
 }
 
@@ -383,9 +384,9 @@ function assemble_street_name(streetName) {
 	if (streetName["toDest"] === "") {
 		return streetName["toRef"] + " " + streetName["toStreetName"];
 	} else if (streetName["toRef"] === "") {
-		return streetName["toStreetName"] + (tts ? ", " : " ") + dictionary["toward"] + " " + streetName["toDest"];
+		return streetName["toStreetName"] + (tts ? ", " : " ") + streetName["toDest"] + " " + dictionary["toward"];
 	} else if (streetName["toRef"] != "") {
-		return streetName["toRef"] + " " + streetName["toDest"] + (tts ? ", " : " ") + dictionary["toward"];
+		return streetName["toRef"] + " " + streetName["toDest"];
 	}
 }
 
